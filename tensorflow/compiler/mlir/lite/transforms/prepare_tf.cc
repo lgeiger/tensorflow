@@ -493,6 +493,35 @@ struct ConvertTFStridedSlice : public RewritePattern {
   }
 };
 
+
+// The bconv will do the following:
+// output = fused_add[channel] + fused_multiply[channel] * popcount
+// We use this to implement two things:
+// - `y1 = n - 2 * popcount`     (the backtransformation to -1,+1 space)
+// - `y2 = a + b * y1`           (optional fused batchnorm)
+// Together they become
+// `y = (a + b*n) + (-2b) * popcount
+
+DenseElementsAttr GetBias(Value filter) {
+  auto filter_type = filter.getType().cast<ShapedType>();
+  auto filter_shape = filter_type.getShape();
+  // Here the weights are still HWIO
+  auto dotproduct_size = filter_shape[0] * filter_shape[1] * filter_shape[2];
+
+  RankedTensorType type = RankedTensorType::get(
+      {filter_shape[3]}, filter_type.getElementType());
+  return DenseElementsAttr::get(type, dotproduct_size);
+}
+
+DenseElementsAttr GetMultiplier(Value filter) {
+  auto filter_type = filter.getType().cast<ShapedType>();
+  auto filter_shape = filter_type.getShape();
+
+  RankedTensorType type = RankedTensorType::get(
+      {filter_shape[3]}, filter_type.getElementType());
+  return DenseElementsAttr::get(type, -2.0f);
+}
+
 #include "tensorflow/compiler/mlir/lite/transforms/generated_prepare_tf.inc"
 
 void PrepareTFPass::runOnFunction() {
