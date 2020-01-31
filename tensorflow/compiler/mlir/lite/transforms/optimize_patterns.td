@@ -98,6 +98,17 @@ multiclass FuseBinaryOpToPrecedingAffine<dag binaryOp> {
                           $multiplier),
           [(CanFuseConvOrDepthwiseConv<"true"> $filter, $value),
            (HasOneUse $output)]>;
+  def : Pat<(binaryOp (TF_LqceBconv2d64Op:$output $input, $filter,
+                          $fused_multiply, (ConstantOp F32ElementsAttr:$fused_add), $strides,
+                          $padding, $explicit_paddings, $data_format,
+                          $dilations, $filter_format),
+                      (ConstantOp F32ElementsAttr:$value), TFL_AF_None),
+            (TF_LqceBconv2d64Op $input, $filter, $fused_multiply,
+                          (binaryOp (ConstantOp $fused_add), (ConstantOp $value), TFL_AF_None),
+                          $strides, $padding, $explicit_paddings, $data_format,
+                          $dilations, $filter_format),
+            [(CanFuseConvOrDepthwiseConv<"false"> $filter, $value),
+            (HasOneUse $output)]>;
 }
 foreach binaryOp = [TFL_AddOp, TFL_SubOp] in
   defm : FuseBinaryOpToPrecedingAffine<binaryOp>;
@@ -151,6 +162,21 @@ multiclass FuseMulOrDivWithConv2dOrDepthwiseConv2d<dag BinaryOp> {
                           $padding, $stride_h, $stride_w),
           [(CanFuseConvOrDepthwiseConv<"false"> $filter, $value),
            (HasOneUse $conv_output)]>;
+  def : Pat<(BinaryOp (TF_LqceBconv2d64Op:$conv_output $input, $filter,
+                        (ConstantOp F32ElementsAttr:$fused_multiply),
+                        (ConstantOp F32ElementsAttr:$fused_add),
+                        $strides, $padding, $explicit_paddings, $data_format,
+                        $dilations, $filter_format),
+                      (ConstantOp F32ElementsAttr:$value), $TFL_AF_None),
+            (TF_LqceBconv2d64Op $input, $filter,
+                        (BinaryOp (ConstantOp $fused_multiply),
+                                  (ConstantOp $value), TFL_AF_None),
+                        (BinaryOp (ConstantOp $fused_add),
+                                  (ConstantOp $value), TFL_AF_None),
+                        $strides, $padding, $explicit_paddings, $data_format,
+                        $dilations, $filter_format),
+         [(CanFuseConvOrDepthwiseConv<"false"> $filter, $value),
+          (HasOneUse $conv_output)]>;
 }
 
 foreach BinaryOp = [TFL_DivOp, TFL_MulOp] in
