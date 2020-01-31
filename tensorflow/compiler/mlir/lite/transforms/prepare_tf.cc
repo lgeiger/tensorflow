@@ -510,7 +510,7 @@ DenseElementsAttr GetBias(Value filter) {
 
   RankedTensorType type = RankedTensorType::get(
       {filter_shape[3]}, filter_type.getElementType());
-  return DenseElementsAttr::get(type, dotproduct_size);
+  return DenseElementsAttr::get(type, static_cast<float_t>(dotproduct_size));
 }
 
 DenseElementsAttr GetMultiplier(Value filter) {
