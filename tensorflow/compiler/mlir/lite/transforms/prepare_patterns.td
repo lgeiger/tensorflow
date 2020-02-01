@@ -210,9 +210,8 @@ class I32VectorElementsAttr<int len> : ElementsAttrBase<
 
 def GetBias : NativeCodeCall<"GetBias($0)">;
 def GetMultiplier : NativeCodeCall<"GetMultiplier($0)">;
+def BinaryFilter : Constraint<CPred<"IsBinaryFilter($0)">>;
 
-// FIXME: We need to check that $filters is actually binary since BSign got
-//        constant folded into $filters by grappler
 def : Pat<(TF_Conv2DOp (TF_LqceBsignOp $input), $filter, $strides, $use_cudnn,
                        $padding, $explicit_padding, $data_format, $dilations),
           (TF_LqceBconv2d64Op $input,
@@ -221,4 +220,4 @@ def : Pat<(TF_Conv2DOp (TF_LqceBsignOp $input), $filter, $strides, $use_cudnn,
             (TF_ConstOp (GetBias $filter)),
             $strides, $padding, $explicit_padding,
             $data_format, $dilations, ConstantAttr<StrAttr, "OHWI">),
-          [], (addBenefit 90)>;
+          [(BinaryFilter $filter)], (addBenefit 90)>;

@@ -522,6 +522,23 @@ DenseElementsAttr GetMultiplier(Value filter) {
   return DenseElementsAttr::get(type, -2.0f);
 }
 
+static bool IsConst(Operation* op) {
+  return isa<ConstantOp>(op) || isa<TF::ConstOp>(op) ||
+         isa<ConstOp>(op) || isa<QConstOp>(op);
+}
+
+bool IsBinaryFilter(Value filter) {
+  auto op = filter.getDefiningOp();
+  if (!IsConst(op)) return false;
+
+  auto tensor_attr = op->getAttr("value").cast<DenseElementsAttr>();
+  for (auto value : tensor_attr.getValues<float>()) {
+    // TODO(arash): There is probably a better way to do this?
+    if (std::abs((std::abs(value) - 1.0f)) > 0.005f) return false;
+  }
+  return true;
+}
+
 #include "tensorflow/compiler/mlir/lite/transforms/generated_prepare_tf.inc"
 
 void PrepareTFPass::runOnFunction() {
