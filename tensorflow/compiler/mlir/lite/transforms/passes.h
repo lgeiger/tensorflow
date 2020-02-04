@@ -35,6 +35,9 @@ std::unique_ptr<OpPassBase<FuncOp>> CreateLegalizeTFPass();
 // Creates an instance of the TensorFlow Lite dialect Optimize pass.
 std::unique_ptr<OpPassBase<FuncOp>> CreateOptimizePass();
 
+// Creates an instance of the TensorFlow dialect PrepareLCE pass.
+std::unique_ptr<OpPassBase<FuncOp>> CreatePrepareLCEPass();
+
 // Creates an instance of the TensorFlow Lite dialect PrepareTF pass.
 std::unique_ptr<OpPassBase<FuncOp>> CreatePrepareTFPass(
     bool unfold_batch_matmul);
