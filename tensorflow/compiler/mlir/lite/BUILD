@@ -111,6 +111,23 @@ gentbl(
 )
 
 gentbl(
+    name = "tensorflow_lite_optimize_lce_inc_gen",
+    tbl_outs = [
+        (
+            "-gen-rewriters",
+            "transforms/generated_optimize_lce.inc",
+        ),
+    ],
+    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    td_file = "transforms/optimize_lce_patterns.td",
+    td_srcs = [
+        ":tensorflow_lite_ops_td_files",
+        "@llvm-project//mlir:StdOpsTdFiles",
+        "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
+    ],
+)
+
+gentbl(
     name = "tensorflow_lite_lower_static_tensor_list_inc_gen",
     tbl_outs = [
         (
@@ -303,12 +320,14 @@ cc_library(
         "transforms/generated_legalize_tf.inc",
         "transforms/generated_lower_static_tensor_list.inc",
         "transforms/generated_prepare_lce.inc",
+        "transforms/generated_optimize_lce.inc",
         "transforms/generated_prepare_tf.inc",
         "transforms/legalize_ophint_func_op.cc",
         "transforms/legalize_tf.cc",
         "transforms/lower_static_tensor_list.cc",
         "transforms/optimize_functional_ops.cc",
         "transforms/prepare_composite_functions_tf.cc",
+        "transforms/optimize_lce.cc",
         "transforms/prepare_lce.cc",
         "transforms/prepare_tf.cc",
         "transforms/split_merged_operands.cc",
