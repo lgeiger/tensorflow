@@ -16,7 +16,6 @@ limitations under the License.
 #ifndef TENSORFLOW_COMPILER_MLIR_LITE_TF_LCE_TFL_PASSES_H_
 #define TENSORFLOW_COMPILER_MLIR_LITE_TF_LCE_TFL_PASSES_H_
 
-#include "mlir/IR/Module.h"  // TF:llvm-project
 #include "mlir/Pass/PassManager.h"  // TF:llvm-project
 #include "tensorflow/compiler/mlir/lite/common/tfl_pass_config.h"
 

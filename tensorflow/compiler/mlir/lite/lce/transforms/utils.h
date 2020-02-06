@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "mlir/IR/Matchers.h"
 #include "mlir/IR/PatternMatch.h"
 
 namespace mlir {

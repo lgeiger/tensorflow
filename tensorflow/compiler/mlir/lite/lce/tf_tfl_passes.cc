@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/compiler/mlir/lite/tf_tfl_passes.h"
 #include "tensorflow/compiler/mlir/lite/lce/tf_tfl_passes.h"
 #include "tensorflow/compiler/mlir/lite/lce/transforms/passes.h"
 
@@ -22,12 +21,11 @@ limitations under the License.
 #include "mlir/Pass/Pass.h"  // TF:llvm-project
 #include "mlir/Pass/PassManager.h"  // TF:llvm-project
 #include "mlir/Transforms/Passes.h"  // TF:llvm-project
-#include "tensorflow/compiler/mlir/lite/quantization/quantization_config.h"
 #include "tensorflow/compiler/mlir/lite/quantization/quantization_passes.h"
 #include "tensorflow/compiler/mlir/lite/transforms/passes.h"
+#include "tensorflow/compiler/mlir/lite/tf_tfl_passes.h"
 #include "tensorflow/compiler/mlir/tensorflow/transforms/decode_constant.h"
 #include "tensorflow/compiler/mlir/tensorflow/transforms/passes.h"
-#include "tensorflow/compiler/mlir/tensorflow/translate/tf_mlir_translate.h"
 
 namespace mlir {
 /// Create a pass to convert from the TFExecutor to the TF control dialect.
