@@ -165,17 +165,6 @@ py_test(
 )
 
 py_test(
-    name = "lce_test",
-    srcs = ["lce_test.py"],
-    python_version = "PY3",
-    deps = [
-        ":lite",
-        "//tensorflow/python:client_testlib",
-        "//tensorflow/python:framework_test_lib",
-    ],
-)
-
-py_test(
     name = "lite_flex_test",
     srcs = ["lite_flex_test.py"],
     python_version = "PY3",
