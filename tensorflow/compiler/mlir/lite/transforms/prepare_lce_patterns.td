@@ -14,7 +14,7 @@ limitations under the License.
 ==============================================================================*/
 
 include "tensorflow/compiler/mlir/lite/transforms/prepare_patterns.td"
-include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.td"
+include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.td"
 
 
 // This relies on implementation details of larq.math.sign. We should make

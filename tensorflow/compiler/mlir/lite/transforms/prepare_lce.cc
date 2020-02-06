@@ -16,8 +16,10 @@ limitations under the License.
 #include "mlir/Pass/Pass.h"  // TF:llvm-project
 #include "tensorflow/compiler/mlir/lite/ir/tfl_ops.h"
 #include "tensorflow/compiler/mlir/lite/quantization/quantization_utils.h"
+#include "tensorflow/compiler/mlir/lite/transforms/lce_utils.h"
 #include "tensorflow/compiler/mlir/lite/transforms/passes.h"
 #include "tensorflow/compiler/mlir/lite/utils/validators.h"
+#include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.h"
 #include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.h"
 
 namespace mlir {
@@ -84,6 +86,12 @@ void PrepareLCE::runOnFunction() {
   auto func = getFunction();
 
   TFL::populateWithGenerated(ctx, &patterns);
+  // Cleanup dead ops manually. LCE ops are not registered to the TF dialect so
+  // op->hasNoSideEffect() will return false. Therefor applyPatternsGreedily
+  // won't automatically remove the dead nodes. See
+  // https://github.com/llvm/llvm-project/blob/master/mlir/include/mlir/IR/Operation.h#L457-L462
+  patterns.insert<mlir::CleanupDeadOps<TF::LqceBsignOp>,
+                  mlir::CleanupDeadOps<TF::LqceBconv2d64Op>>(ctx);
   applyPatternsGreedily(func, patterns);
 }
 

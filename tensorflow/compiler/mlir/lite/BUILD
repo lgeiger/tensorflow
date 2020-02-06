@@ -337,6 +337,7 @@ cc_library(
     hdrs = [
         "transforms/dilated_conv.h",
         "transforms/passes.h",
+        "transforms/lce_utils.h",
         "transforms/unroll_batch_matmul.h",
     ],
     deps = [
