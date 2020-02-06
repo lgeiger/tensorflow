@@ -15,9 +15,9 @@ limitations under the License.
 
 #include "mlir/Pass/Pass.h"  // TF:llvm-project
 #include "tensorflow/compiler/mlir/lite/ir/tfl_ops.h"
-#include "tensorflow/compiler/mlir/lite/ir/lce_ops.h"
+#include "tensorflow/compiler/mlir/lite/lce/ir/lce_ops.h"
+#include "tensorflow/compiler/mlir/lite/lce/transforms/utils.h"
 #include "tensorflow/compiler/mlir/lite/quantization/quantization_utils.h"
-#include "tensorflow/compiler/mlir/lite/transforms/lce_utils.h"
 #include "tensorflow/compiler/mlir/lite/transforms/passes.h"
 #include "tensorflow/compiler/mlir/lite/utils/validators.h"
 #include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.h"
@@ -78,7 +78,7 @@ bool IsBinaryFilter(Value filter) {
   return true;
 }
 
-#include "tensorflow/compiler/mlir/lite/transforms/generated_prepare_lce.inc"
+#include "tensorflow/compiler/mlir/lite/lce/transforms/generated_prepare.inc"
 
 void PrepareLCE::runOnFunction() {
   OwningRewritePatternList patterns;

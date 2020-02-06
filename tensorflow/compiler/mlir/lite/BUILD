@@ -58,29 +58,6 @@ gentbl(
 )
 
 gentbl(
-    name = "lce_ops_inc_gen",
-    tbl_outs = [
-        (
-            "-gen-op-decls",
-            "ir/lce_ops.h.inc",
-        ),
-        (
-            "-gen-op-defs",
-            "ir/lce_ops.cc.inc",
-        ),
-        (
-            "-gen-op-doc",
-            "g3doc/lce_ops.md",
-        ),
-    ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
-    td_file = "ir/lce_ops.td",
-    td_srcs = [
-        "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
-    ],
-)
-
-gentbl(
     name = "tensorflow_lite_op_interfaces_inc_gen",
     tbl_outs = [
         (
@@ -114,39 +91,6 @@ gentbl(
         "@llvm-project//mlir:StdOpsTdFiles",
         "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
         "//tensorflow/compiler/mlir/tensorflow:tensorflow_optimize_td_files",
-    ],
-)
-
-gentbl(
-    name = "tensorflow_lite_prepare_lce_inc_gen",
-    tbl_outs = [
-        (
-            "-gen-rewriters",
-            "transforms/generated_prepare_lce.inc",
-        ),
-    ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
-    td_file = "transforms/prepare_lce_patterns.td",
-    td_srcs = [
-        "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
-        "transforms/prepare_patterns.td",
-    ],
-)
-
-gentbl(
-    name = "tensorflow_lite_optimize_lce_inc_gen",
-    tbl_outs = [
-        (
-            "-gen-rewriters",
-            "transforms/generated_optimize_lce.inc",
-        ),
-    ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
-    td_file = "transforms/optimize_lce_patterns.td",
-    td_srcs = [
-        ":tensorflow_lite_ops_td_files",
-        "@llvm-project//mlir:StdOpsTdFiles",
-        "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
     ],
 )
 
@@ -254,16 +198,12 @@ cc_library(
         "ir/tfl_ops.cc",
         "ir/tfl_ops.cc.inc",
         "ir/tfl_ops.h.inc",
-        "ir/lce_ops.cc",
-        "ir/lce_ops.cc.inc",
-        "ir/lce_ops.h.inc",
         "ir/tfl_ops_interface.cc.inc",
         "ir/tfl_ops_interface.h.inc",
         "utils/attribute_utils.cc",
     ],
     hdrs = [
         "ir/tfl_ops.h",
-        "ir/lce_ops.h",
         "transforms/passes.h",
         "utils/attribute_utils.h",
         "//tensorflow/compiler/mlir/lite/quantization:quantization_traits.h",
@@ -271,7 +211,6 @@ cc_library(
     ],
     deps = [
         ":tensorflow_lite_ops_inc_gen",
-        ":lce_ops_inc_gen",
         ":validators",
         "@llvm-project//llvm:support",
         "@llvm-project//mlir:Analysis",
@@ -347,16 +286,12 @@ cc_library(
         "transforms/extract_ophint.cc",
         "transforms/generated_legalize_tf.inc",
         "transforms/generated_lower_static_tensor_list.inc",
-        "transforms/generated_prepare_lce.inc",
-        "transforms/generated_optimize_lce.inc",
         "transforms/generated_prepare_tf.inc",
         "transforms/legalize_ophint_func_op.cc",
         "transforms/legalize_tf.cc",
         "transforms/lower_static_tensor_list.cc",
         "transforms/optimize_functional_ops.cc",
         "transforms/prepare_composite_functions_tf.cc",
-        "transforms/optimize_lce.cc",
-        "transforms/prepare_lce.cc",
         "transforms/prepare_tf.cc",
         "transforms/split_merged_operands.cc",
         "transforms/trim_functions_tf.cc",
@@ -365,7 +300,6 @@ cc_library(
     hdrs = [
         "transforms/dilated_conv.h",
         "transforms/passes.h",
-        "transforms/lce_utils.h",
         "transforms/unroll_batch_matmul.h",
     ],
     deps = [

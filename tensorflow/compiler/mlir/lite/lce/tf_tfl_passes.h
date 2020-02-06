@@ -13,22 +13,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "mlir/Pass/Pass.h"  // TF:llvm-project
+#ifndef TENSORFLOW_COMPILER_MLIR_LITE_TF_LCE_TFL_PASSES_H_
+#define TENSORFLOW_COMPILER_MLIR_LITE_TF_LCE_TFL_PASSES_H_
 
-namespace mlir {
+#include "mlir/IR/Module.h"  // TF:llvm-project
+#include "mlir/Pass/PassManager.h"  // TF:llvm-project
+#include "tensorflow/compiler/mlir/lite/common/tfl_pass_config.h"
 
-template <class TOp>
-struct CleanupDeadOps : public OpRewritePattern<TOp> {
-  using OpRewritePattern<TOp>::OpRewritePattern;
+namespace tensorflow {
 
-  PatternMatchResult matchAndRewrite(TOp op,
-                                     PatternRewriter &rewriter) const override {
-    if (op.use_empty()) {
-      rewriter.eraseOp(op);
-      return Pattern::matchSuccess();
-    }
-    return Pattern::matchFailure();
-  }
-};
+// Add the TF to TFLite passes, specified in the pass_config, into a
+// pass_manager.
+void AddTFToLCETFLConversionPasses(const mlir::TFL::PassConfig& pass_config,
+                                   mlir::OpPassManager* pass_manager);
 
-}  // namespace mlir
+}  // namespace tensorflow
+
+#endif  // TENSORFLOW_COMPILER_MLIR_LITE_TF_LCE_TFL_PASSES_H_

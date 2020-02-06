@@ -14,6 +14,8 @@ limitations under the License.
 ==============================================================================*/
 
 #include "tensorflow/compiler/mlir/lite/tf_tfl_passes.h"
+#include "tensorflow/compiler/mlir/lite/lce/tf_tfl_passes.h"
+#include "tensorflow/compiler/mlir/lite/lce/transforms/passes.h"
 
 #include "mlir/IR/Attributes.h"  // TF:llvm-project
 #include "mlir/IR/Module.h"  // TF:llvm-project
@@ -33,29 +35,10 @@ std::unique_ptr<OpPassBase<FuncOp>>
 CreateTFExecutorToControlDialectConversion();
 }  // namespace mlir
 
+
 namespace tensorflow {
 
-void AddQuantizationPasses(const mlir::TFL::QuantizationSpecs& quant_specs,
-                           mlir::OpPassManager* pass_manager) {
-  pass_manager->addPass(mlir::TFL::CreatePrepareQuantizePass(quant_specs));
-  pass_manager->addPass(mlir::TFL::CreateQuantizePass());
-  bool emit_quant_adaptor_ops =
-      quant_specs.inference_type != quant_specs.inference_input_type;
-  pass_manager->addPass(
-      mlir::TFL::CreatePostQuantizePass(emit_quant_adaptor_ops));
-
-  if (quant_specs.default_ranges.first.hasValue() ||
-      quant_specs.default_ranges.second.hasValue()) {
-    pass_manager->addPass(mlir::TFL::CreateDefaultQuantParamsPass(
-        quant_specs.default_ranges.first.getValueOr(0.0),
-        quant_specs.default_ranges.second.getValueOr(0.0)));
-    pass_manager->addPass(mlir::TFL::CreateQuantizePass());
-    pass_manager->addPass(
-        mlir::TFL::CreatePostQuantizePass(emit_quant_adaptor_ops));
-  }
-}
-
-void AddTFToTFLConversionPasses(const mlir::TFL::PassConfig& pass_config,
+void AddTFToLCETFLConversionPasses(const mlir::TFL::PassConfig& pass_config,
                                 mlir::OpPassManager* pass_manager) {
   pass_manager->addPass(mlir::tf_executor::CreateSwitchFoldPass());
   if (pass_config.skip_control_dialect) {
@@ -119,6 +102,8 @@ void AddTFToTFLConversionPasses(const mlir::TFL::PassConfig& pass_config,
   // The below passes only make sense if Builtin TFLite ops are enabled
   // for emission.
   if (pass_config.emit_builtin_tflite_ops) {
+    // Inject Larq Compute Engine Ops
+    pass_manager->addPass(mlir::TFL::CreatePrepareLCEPass());
     // Prepare for TFLite dialect, rerun canonicalization, and then legalize to
     // the TFLite dialect.
     pass_manager->addPass(
@@ -126,6 +111,7 @@ void AddTFToTFLConversionPasses(const mlir::TFL::PassConfig& pass_config,
     pass_manager->addNestedPass<mlir::FuncOp>(mlir::createCanonicalizerPass());
     pass_manager->addPass(mlir::TFL::CreateLegalizeTFPass());
     pass_manager->addPass(mlir::TFL::CreateOptimizePass());
+    pass_manager->addPass(mlir::TFL::CreateOptimizeLCEPass());
     // This pass operates on TensorFlow ops but is triggered after legalization
     // so that it can target constants introduced once TensorFlow Identity ops
     // are removed during legalization.

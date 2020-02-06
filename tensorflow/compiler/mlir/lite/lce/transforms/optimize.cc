@@ -17,8 +17,8 @@ limitations under the License.
 #include "mlir/IR/PatternMatch.h"          // TF:llvm-project
 #include "mlir/Pass/Pass.h"                // TF:llvm-project
 #include "tensorflow/compiler/mlir/lite/ir/tfl_ops.h"
-#include "tensorflow/compiler/mlir/lite/ir/lce_ops.h"
-#include "tensorflow/compiler/mlir/lite/transforms/lce_utils.h"
+#include "tensorflow/compiler/mlir/lite/lce/ir/lce_ops.h"
+#include "tensorflow/compiler/mlir/lite/lce/transforms/utils.h"
 #include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.h"
 
 namespace mlir {
@@ -31,7 +31,7 @@ struct OptimizeLCE : public FunctionPass<OptimizeLCE> {
   void runOnFunction() override;
 };
 
-#include "tensorflow/compiler/mlir/lite/transforms/generated_optimize_lce.inc"
+#include "tensorflow/compiler/mlir/lite/lce/transforms/generated_optimize.inc"
 
 void OptimizeLCE::runOnFunction() {
   OwningRewritePatternList patterns;

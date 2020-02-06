@@ -13,13 +13,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/compiler/mlir/lite/ir/lce_ops.h"
+#include "mlir/IR/Matchers.h"
+#include "mlir/IR/PatternMatch.h"
 
 namespace mlir {
-namespace TF {
 
-#define GET_OP_CLASSES
-#include "tensorflow/compiler/mlir/lite/ir/lce_ops.cc.inc"
+template <class TOp>
+struct CleanupDeadOps : public OpRewritePattern<TOp> {
+  using OpRewritePattern<TOp>::OpRewritePattern;
 
-}  // namespace TF
+  PatternMatchResult matchAndRewrite(TOp op,
+                                     PatternRewriter &rewriter) const override {
+    if (op.use_empty()) {
+      rewriter.eraseOp(op);
+      return Pattern::matchSuccess();
+    }
+    return Pattern::matchFailure();
+  }
+};
+
 }  // namespace mlir
