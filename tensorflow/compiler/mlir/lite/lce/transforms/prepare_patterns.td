@@ -19,15 +19,10 @@ include "tensorflow/compiler/mlir/lite/lce/ir/lce_ops.td"
 
 // This relies on implementation details of larq.math.sign. We should make
 // this more general in the future
-multiclass FuseBSign<dag AddOp> {
-  def : Pat<(TF_SignOp (AddOp (TF_SignOp $arg), $c)), (TF_LqceBsignOp $arg),
-            [], (addBenefit 100)>;
-  def : Pat<(TF_SignOp (AddOp $c, (TF_SignOp $arg))), (TF_LqceBsignOp $arg),
-            [], (addBenefit 100)>;
-}
-
-foreach AddOp = [TF_AddOp, TF_AddV2Op] in
-  defm : FuseBSign<AddOp>;
+def : Pat<(TF_SignOp (TF_AddV2Op (TF_SignOp $arg), $c)), (TF_LqceBsignOp $arg),
+          [], (addBenefit 100)>;
+def : Pat<(TF_SignOp (TF_AddV2Op $c, (TF_SignOp $arg))), (TF_LqceBsignOp $arg),
+          [], (addBenefit 100)>;
 
 // Copied from legalize_patterns.td
 class I32VectorElementsAttr<int len> : ElementsAttrBase<
