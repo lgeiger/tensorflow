@@ -15,7 +15,7 @@ limitations under the License.
 
 include "mlir/Dialect/StandardOps/Ops.td"
 include "tensorflow/compiler/mlir/lite/ir/tfl_ops.td"
-include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.td"
+include "tensorflow/compiler/mlir/lite/ir/lce_ops.td"
 
 
 def F32ElementsAttr : ElementsAttrBase<

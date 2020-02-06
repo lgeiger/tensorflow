@@ -58,6 +58,29 @@ gentbl(
 )
 
 gentbl(
+    name = "lce_ops_inc_gen",
+    tbl_outs = [
+        (
+            "-gen-op-decls",
+            "ir/lce_ops.h.inc",
+        ),
+        (
+            "-gen-op-defs",
+            "ir/lce_ops.cc.inc",
+        ),
+        (
+            "-gen-op-doc",
+            "g3doc/lce_ops.md",
+        ),
+    ],
+    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    td_file = "ir/lce_ops.td",
+    td_srcs = [
+        "//tensorflow/compiler/mlir/tensorflow:tensorflow_ops_td_files",
+    ],
+)
+
+gentbl(
     name = "tensorflow_lite_op_interfaces_inc_gen",
     tbl_outs = [
         (
@@ -231,12 +254,16 @@ cc_library(
         "ir/tfl_ops.cc",
         "ir/tfl_ops.cc.inc",
         "ir/tfl_ops.h.inc",
+        "ir/lce_ops.cc",
+        "ir/lce_ops.cc.inc",
+        "ir/lce_ops.h.inc",
         "ir/tfl_ops_interface.cc.inc",
         "ir/tfl_ops_interface.h.inc",
         "utils/attribute_utils.cc",
     ],
     hdrs = [
         "ir/tfl_ops.h",
+        "ir/lce_ops.h",
         "transforms/passes.h",
         "utils/attribute_utils.h",
         "//tensorflow/compiler/mlir/lite/quantization:quantization_traits.h",
@@ -244,6 +271,7 @@ cc_library(
     ],
     deps = [
         ":tensorflow_lite_ops_inc_gen",
+        ":lce_ops_inc_gen",
         ":validators",
         "@llvm-project//llvm:support",
         "@llvm-project//mlir:Analysis",

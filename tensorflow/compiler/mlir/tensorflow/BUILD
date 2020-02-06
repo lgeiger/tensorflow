@@ -52,29 +52,6 @@ gentbl(
 )
 
 gentbl(
-    name = "lce_ops_inc_gen",
-    tbl_outs = [
-        (
-            "-gen-op-decls",
-            "ir/lce_ops.h.inc",
-        ),
-        (
-            "-gen-op-defs",
-            "ir/lce_ops.cc.inc",
-        ),
-        (
-            "-gen-op-doc",
-            "g3doc/lce_ops.md",
-        ),
-    ],
-    tblgen = "@llvm-project//mlir:mlir-tblgen",
-    td_file = "ir/lce_ops.td",
-    td_srcs = [
-        ":tensorflow_ops_td_files",
-    ],
-)
-
-gentbl(
     name = "tf_saved_model_inc_gen",
     tbl_outs = [
         (
@@ -172,9 +149,6 @@ cc_library(
         "ir/tf_ops.cc",
         "ir/tf_ops.cc.inc",
         "ir/tf_ops.h.inc",
-        "ir/lce_ops.cc",
-        "ir/lce_ops.cc.inc",
-        "ir/lce_ops.h.inc",
         "ir/tf_saved_model.cc",
         "ir/tf_types.cc",
     ],
@@ -183,7 +157,6 @@ cc_library(
         "ir/tf_device.h",
         "ir/tf_executor.h",
         "ir/tf_ops.h",
-        "ir/lce_ops.h",
         "ir/tf_saved_model.h",
         "ir/tf_traits.h",
         "ir/tf_types.def",
@@ -200,7 +173,6 @@ cc_library(
         ":tensorflow_device_ops_inc_gen",
         ":tensorflow_executor_inc_gen",
         ":tensorflow_ops_inc_gen",
-        ":lce_ops_inc_gen",
         ":tf_saved_model_inc_gen",
         "//tensorflow/compiler/mlir/lite:validators",
         "//tensorflow/core:framework",

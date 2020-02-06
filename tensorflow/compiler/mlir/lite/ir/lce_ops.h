@@ -13,13 +13,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.h"
+#ifndef TENSORFLOW_COMPILER_MLIR_TENSORFLOW_IR_LCE_OPS_H_
+#define TENSORFLOW_COMPILER_MLIR_TENSORFLOW_IR_LCE_OPS_H_
+
+#include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.h"
 
 namespace mlir {
 namespace TF {
 
 #define GET_OP_CLASSES
-#include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.cc.inc"
+#include "tensorflow/compiler/mlir/lite/ir/lce_ops.h.inc"
 
 }  // namespace TF
 }  // namespace mlir
+
+#endif  // TENSORFLOW_COMPILER_MLIR_TENSORFLOW_IR_LCE_OPS_H_

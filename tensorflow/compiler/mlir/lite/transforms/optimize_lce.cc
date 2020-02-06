@@ -17,8 +17,8 @@ limitations under the License.
 #include "mlir/IR/PatternMatch.h"          // TF:llvm-project
 #include "mlir/Pass/Pass.h"                // TF:llvm-project
 #include "tensorflow/compiler/mlir/lite/ir/tfl_ops.h"
+#include "tensorflow/compiler/mlir/lite/ir/lce_ops.h"
 #include "tensorflow/compiler/mlir/lite/transforms/lce_utils.h"
-#include "tensorflow/compiler/mlir/tensorflow/ir/lce_ops.h"
 #include "tensorflow/compiler/mlir/tensorflow/ir/tf_ops.h"
 
 namespace mlir {
