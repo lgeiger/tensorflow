@@ -6923,7 +6923,7 @@ def _reconstruct_sequence_inputs(op_def, inputs, attrs):
   return grouped_inputs
 
 
-class _TensorIterator(object):
+class _TensorIterator(collections_abc.Iterator):
   """Iterates over the leading dim of a Tensor. Performs no error checks."""
 
   __slots__ = ["_tensor", "_index", "_limit"]
@@ -6932,9 +6932,6 @@ class _TensorIterator(object):
     self._tensor = tensor
     self._index = 0
     self._limit = dim0
-
-  def __iter__(self):
-    return self
 
   def __next__(self):
     if self._index == self._limit:

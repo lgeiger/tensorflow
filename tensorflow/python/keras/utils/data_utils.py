@@ -47,6 +47,7 @@ from tensorflow.python.keras.utils import tf_inspect
 from tensorflow.python.keras.utils.generic_utils import Progbar
 from tensorflow.python.keras.utils.io_utils import path_to_string
 from tensorflow.python.platform import tf_logging as logging
+from tensorflow.python.util.compat import collections_abc
 from tensorflow.python.util.tf_export import keras_export
 
 
@@ -362,7 +363,7 @@ def validate_file(fpath, file_hash, algorithm='auto', chunk_size=65535):
     return False
 
 
-class ThreadsafeIter(object):
+class ThreadsafeIter(collections_abc.Iterator):
   """Wrap an iterator with a lock and propagate exceptions to all threads."""
 
   def __init__(self, it):
@@ -377,9 +378,6 @@ class ThreadsafeIter(object):
     # just in a different thread. In order to provide thread safety, once
     # self.it has thrown an exception we continue to throw the same exception.
     self._exception = None
-
-  def __iter__(self):
-    return self
 
   def next(self):
     return self.__next__()

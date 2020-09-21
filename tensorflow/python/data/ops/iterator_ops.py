@@ -731,9 +731,6 @@ class OwnedIterator(IteratorBase):
           device=self._device,
           deleter=self._deleter)
 
-  def __iter__(self):
-    return self
-
   def next(self):  # For Python 2 compatibility
     return self.__next__()
 

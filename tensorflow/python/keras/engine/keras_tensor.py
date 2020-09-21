@@ -27,6 +27,7 @@ from tensorflow.python.framework import type_spec as type_spec_module
 from tensorflow.python.ops import array_ops
 from tensorflow.python.util import nest
 from tensorflow.python.util import object_identity
+from tensorflow.python.util.compat import collections_abc
 
 # pylint: disable=g-classes-have-attributes
 
@@ -330,16 +331,13 @@ class KerasTensor(object):
 KerasTensor._overload_all_operators()  # pylint: disable=protected-access
 
 
-class _KerasTensorIterator(object):
+class _KerasTensorIterator(collections_abc.Iterator):
   """Iterates over the leading dim of a KerasTensor. Performs 0 error checks."""
 
   def __init__(self, tensor, dim0):
     self._tensor = tensor
     self._index = 0
     self._limit = dim0
-
-  def __iter__(self):
-    return self
 
   def __next__(self):
     if self._index == self._limit:

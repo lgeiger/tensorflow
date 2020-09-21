@@ -630,9 +630,6 @@ class DistributedIteratorBase(DistributedIteratorInterface):
     except errors.OutOfRangeError:
       raise StopIteration
 
-  def __iter__(self):
-    return self
-
   def get_next_as_optional(self):
     global_has_value, replicas = _get_next_as_optional(
         self, self._strategy, return_per_replica=True)
