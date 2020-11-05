@@ -28,6 +28,7 @@ from tensorflow.python.framework import type_spec as type_spec_module
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops.ragged import ragged_operators  # pylint: disable=unused-import
 from tensorflow.python.ops.ragged import ragged_tensor
+from tensorflow.python.types import core as core_tf_types
 from tensorflow.python.util import nest
 from tensorflow.python.util import object_identity
 
@@ -60,7 +61,7 @@ def keras_tensors_enabled():
 _MAX_TENSOR_RANK = 254
 
 
-class KerasTensor(object):
+class KerasTensor(object, core_tf_types.Tensor):
   """A representation of a Keras in/output during Functional API construction.
 
   `KerasTensor`s are tensor-like objects that represent the symbolic inputs
