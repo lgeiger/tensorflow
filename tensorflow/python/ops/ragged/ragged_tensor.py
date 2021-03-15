@@ -1737,7 +1737,7 @@ class RaggedTensor(composite_tensor.CompositeTensor,
       row_partition_types = [x[0] for x in type_tensor_pairs]
       row_partition_tensors = [x[1] for x in type_tensor_pairs]
       if default_value is None:
-        default_value = array_ops.zeros((), self.dtype)
+        default_value = array_ops.constant(0, self.dtype)
 
       if (isinstance(shape, (list, tuple)) and
           any(isinstance(v, ops.Tensor) for v in shape) and

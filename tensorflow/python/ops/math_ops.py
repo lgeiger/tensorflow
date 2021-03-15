@@ -2273,7 +2273,7 @@ def count_nonzero_v2(
   with ops.name_scope(name, "count_nonzero", [input]):
     input = ops.convert_to_tensor(input, name="input")
     # A scalar of 'zero' is enough as `not_equal` will broadcast.
-    zero = array_ops.zeros([], dtype=input.dtype)
+    zero = array_ops.constant(0, dtype=input.dtype)
     return cast(
         reduce_sum(
             # int64 reduction happens on GPU

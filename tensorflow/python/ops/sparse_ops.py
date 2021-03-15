@@ -1713,7 +1713,7 @@ def sparse_tensor_to_dense(sp_input,
   """
   sp_input = _convert_to_sparse_tensor(sp_input)
   if default_value is None:
-    default_value = array_ops.zeros([], dtype=sp_input.dtype)
+    default_value = array_ops.constant(0, dtype=sp_input.dtype)
 
   return gen_sparse_ops.sparse_to_dense(
       sp_input.indices,
