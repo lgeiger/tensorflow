@@ -107,7 +107,7 @@ def repeat_ranges(params, splits, repeats):
 
   # Get indices for each range from starts to limits, and use those to gather
   # the values in the desired repetition pattern.
-  one = array_ops.ones((), repeated_starts.dtype)
+  one = array_ops.constant(1, repeated_starts.dtype)
   offsets = gen_ragged_math_ops.ragged_range(
       repeated_starts, repeated_limits, one)
   return array_ops.gather(params, offsets.rt_dense_values)
